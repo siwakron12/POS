@@ -9,9 +9,13 @@ import { FaShoppingBasket } from "react-icons/fa";
 export default function Page() {
     let [selectedValue, setSelectedValue] = useState();
     let [data, setData] = useState(() => {
-        const savedData = sessionStorage.getItem('cartData');
-        return savedData ? JSON.parse(savedData) : [];
+        if (typeof window !== "undefined") {
+            const savedData = sessionStorage.getItem('cartData');
+            return savedData ? JSON.parse(savedData) : [];
+        }
+        return [];
     });
+    
     let [product, setProduct] = useState([])
     // Save cart data to sessionStorage when 'data' changes
     useEffect(() => {

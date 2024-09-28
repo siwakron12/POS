@@ -3,15 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 import ReactToPrint from 'react-to-print';
 import Swal from 'sweetalert2';
 
-    import { useRouter } from 'next/navigation'; // Import useRouter
-   
+import { useRouter } from 'next/navigation'; // Import useRouter
+
 const Billing = () => {
     const router = useRouter(); // Initialize useRouter
     const [dataProduct, setDataProduct] = useState([]);
     const [allPrice, setAllPrice] = useState(0);
     const [money, setMoney] = useState('');
     const componentRef = useRef();
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
     const difference = money - allPrice;
     const handleConfirm = async () => {
         if (money < allPrice) {
@@ -22,14 +22,14 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
             });
             return;
         }
-    
+
         for (const item of dataProduct) {
             const productData = {
                 nameProduct: item.nameProduct,
                 quantity: item.quantity,
                 moneyTotal: allPrice
             };
-    
+
             try {
                 const response = await fetch(`${apiUrl}/sales`, {
                     method: 'POST',
@@ -38,7 +38,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
                     },
                     body: JSON.stringify(productData),
                 });
-    
+
                 if (response.ok) {
                     const result = await response.json();
                     console.log('Product added successfully:', result);
@@ -50,11 +50,11 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
                         text: 'สินค้าได้ถูกเพิ่มในระบบแล้ว!',
                         confirmButtonText: 'ตกลง'
                     });
-                    
+
                     router.push('/pos');
                 } else {
                     console.error('Failed to add product');
-                    
+
                     // แสดง SweetAlert ล้มเหลว
                     Swal.fire({
                         icon: 'error',
@@ -64,7 +64,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
                 }
             } catch (error) {
                 console.error('Error:', error);
-                
+
                 // แสดง SweetAlert ข้อผิดพลาด
                 Swal.fire({
                     icon: 'error',
@@ -74,19 +74,23 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
             }
         }
     };
-    
-    
+
+
 
     // Retrieve data from sessionStorage when the component mounts
     useEffect(() => {
-        const storedCartData = JSON.parse(sessionStorage.getItem('cartData'));
-        const storedTotalPrice = parseFloat(sessionStorage.getItem('totalPrice'));
+        if (typeof window !== "undefined") {
+            const storedCartData = JSON.parse(sessionStorage.getItem('cartData'));
+            const storedTotalPrice = parseFloat(sessionStorage.getItem('totalPrice'));
 
-        if (storedCartData && storedTotalPrice) {
-            setDataProduct(storedCartData);
-            setAllPrice(storedTotalPrice);
+            if (storedCartData && storedTotalPrice) {
+                setDataProduct(storedCartData);
+                setAllPrice(storedTotalPrice);
+            }
         }
+
     }, []);
+
 
     return (
         <div className='p-12 h-full'>

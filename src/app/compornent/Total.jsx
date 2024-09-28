@@ -6,7 +6,7 @@ export default function Total({ dataProduct, clearProduct, deleteSingleProduct }
     const [allPrice, setAllPrice] = useState(0);
     const componentRef = useRef();
     const router = useRouter(); // Initialize useRouter
-
+   
     useEffect(() => {
         const totalPrice = dataProduct.reduce((acc, item) => acc + (item.price * item.quantity), 0);
         setAllPrice(totalPrice);

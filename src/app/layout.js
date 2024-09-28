@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Aside from "./compornent/Aside"; // Ensure the path is correct
 import Login from "./compornent/Login"; // Ensure the path is correct
 import { Providers } from './providers';
@@ -12,8 +12,18 @@ const prompt = Prompt({
 });
 
 export default function RootLayout({ children }) {
-  // Check if 'Bool' is true in sessionStorage initially
-  const [isAuthenticated, setIsAuthenticated] = useState(sessionStorage.getItem('Bool') === 'true');
+  // State to manage authentication status
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // useEffect to check sessionStorage on client-side only
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedBool = sessionStorage.getItem('Bool');
+      if (storedBool === 'true') {
+        setIsAuthenticated(true);
+      }
+    }
+  }, []);
 
   const handleLogin = () => {
     setIsAuthenticated(true);
