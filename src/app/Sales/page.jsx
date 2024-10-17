@@ -5,8 +5,11 @@ import { Chart as ChartJS } from 'chart.js/auto';
 
 export default function Sales() {
   const [salesData, setSalesData] = useState([]);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  
+  const totalSalesSum = salesData.reduce((acc, curr) => acc + curr.totalSales, 0);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
@@ -50,7 +53,12 @@ export default function Sales() {
         <div className="w-full h-[700px] flex justify-center">
           {/* Display the chart using Chart.js */}
           <Line data={chartData} />
+        
         </div>
+        <div className='flex justify-center text-3xl  text-green-600 mt-20'>
+       <h1>ยอดขายรวมทั้งหมด : {totalSalesSum}บาท</h1>
+        </div>
+        
       </section>
     </div>
   );

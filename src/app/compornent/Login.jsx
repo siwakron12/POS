@@ -45,6 +45,7 @@ export default function Login({ onLogin }) {
         text: "Something went wrong. Please try again.",
         icon: "error"
       });
+     
     }
   };
 
